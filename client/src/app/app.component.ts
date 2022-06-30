@@ -1,15 +1,12 @@
 import { HttpClient } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 
-/* interface IUser {
-  Array<{id: number;
-  userName: string;}>
-} */
+
 //| interface
-interface IUser {
+/* interface IUser {
   id: number;
   userName: string;
-};
+} */
 //| End
 
 @Component({
@@ -19,7 +16,8 @@ interface IUser {
 })
 export class AppComponent implements OnInit {
   title = 'Our Dating App';
-  users: IUser[];
+  users: /* IUser[]; */ any;
+
 
   constructor(private http: HttpClient) {}
 
@@ -28,7 +26,7 @@ export class AppComponent implements OnInit {
   }
 
   getUsers() {
-    this.http.get<IUser[]>('https://localhost:5001/api/users').subscribe(
+    this.http.get<any>('https://localhost:5001/api/users').subscribe(
       (res) => {
         this.users = res;
         console.log(this.users);
