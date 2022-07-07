@@ -1,13 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
-
-
-//| interface
-/* interface IUser {
-  id: number;
-  userName: string;
-} */
-//| End
+import { User } from './_models/user';
+import { AccountService } from './_services/account.service';
 
 @Component({
   selector: 'app-root',
@@ -16,25 +10,22 @@ import { Component, OnInit } from '@angular/core';
 })
 export class AppComponent implements OnInit {
   title = 'Our Dating App';
-  users: /* IUser[]; */ any;
+  users: any;
 
-
-  constructor(private http: HttpClient) {}
+  constructor(private accountService: AccountService) {}
 
   ngOnInit() {
-    this.getUsers();
+    this.setCurrentUser();
   }
 
-  getUsers() {
-    this.http.get<any>('https://localhost:5001/api/users').subscribe(
-      (res) => {
-        this.users = res;
-        console.log(this.users);
-      },
-      (error) => {
-        console.log(error);
-      }
+  setCurrentUser() {
+    const user: User = JSON.parse(localStorage.getItem('user'));
+    console.warn(
+      '%c Currect user parsed from JSON: ',
+      'background: #0062b3; color: #fff',
+      user
     );
+    this.accountService.setCurrentUser(user);
   }
 
   //! END OF CLASS
