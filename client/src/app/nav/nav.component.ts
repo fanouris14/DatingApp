@@ -1,7 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { NgForm } from '@angular/forms';
-import { Observable } from 'rxjs';
-import { User } from '../_models/user';
+import { Router } from '@angular/router';
+import { ToastrService } from 'ngx-toastr';
+
 import { AccountService } from '../_services/account.service';
 
 @Component({
@@ -15,11 +16,16 @@ export class NavComponent implements OnInit {
   //   password: string;
   // };
   model: {};
+  loggedInUsername: string;
 
-  constructor(public accountService: AccountService) {}
+  constructor(
+    public accountService: AccountService,
+    private router: Router,
+    private toastr: ToastrService
+  ) {}
 
   ngOnInit(): void {
-
+    this.getLoggedInUsername();
   }
 
   login(form: NgForm) {
@@ -30,16 +36,27 @@ export class NavComponent implements OnInit {
 
     this.accountService.login(this.model).subscribe(
       (res) => {
-        console.log(this.model);
-        console.log(res);
+        console.warn(this.model);
+        console.warn(res);
+        this.router.navigate(['/members']);
       },
-      (error) => {
-        console.log(error);
+      (err) => {
+        console.log(err);
+        this.toastr.error(err.error);
       }
     );
   }
 
+  getLoggedInUsername() {
+    this.accountService.currentUserSource.subscribe((u) => {
+      if (u) {
+        this.loggedInUsername = u.username;
+      }
+    });
+  }
+
   logout() {
     this.accountService.logout();
+    this.router.navigate(['/']);
   }
 }
