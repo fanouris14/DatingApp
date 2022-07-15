@@ -28,7 +28,7 @@ namespace API.Controllers
             if (await UserExists(registerDto.Username))
             {
                 return BadRequest("Username is taken");
-            } 
+            }
 
             //generate hash for passwords
             using var hmac = new HMACSHA512();
@@ -74,7 +74,7 @@ namespace API.Controllers
             {
                 //System.Diagnostics.Debug.WriteLine(" =======> " + computedHash[i] + " - " + user.PasswordHash[i]);
                 if (computedHash[i] != user.PasswordHash[i])
-                {                  
+                {
                     return Unauthorized("invalid password");
                 }
             }
@@ -90,7 +90,7 @@ namespace API.Controllers
         private async Task<bool> UserExists(string username)
         {
             return await _context.Users.AnyAsync(x => x.UserName == username.ToLower());
-                
+
         }
     }
 }
