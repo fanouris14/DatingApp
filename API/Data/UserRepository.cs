@@ -25,6 +25,32 @@ namespace API.Data
             return await _context.Users
                 .Include(p => p.Photos)
                 .SingleOrDefaultAsync(x => x.UserName == username);
+
+            //return await _context.Users
+            //    .Where(x => x.UserName == username)
+            //    .Select(user => new MemberDto
+            //    {
+            //        Id = user.Id,
+            //        Username = user.UserName,
+            //        PhotoUrl = user.Photos.FirstOrDefault(x => x.IsMain).Url,
+            //        KnownAs = user.KnownAs,
+            //        Created = user.Created,
+            //        LastActive = user.LastActive,
+            //        Gender = user.Gender,
+            //        Introduction = user.Introduction,
+            //        LookingFor = user.LookingFor,
+            //        Interests = user.Interests,
+            //        City = user.City,
+            //        Country = user.Country,
+            //        Photos = user.Photos.Select(e => new PhotoDto
+            //        {
+            //            Id = e.Id,
+            //            IsMain = e.IsMain,
+            //            Url = e.Url,
+            //        }).ToList(),
+            //    })
+            //    .SingleOrDefaultAsync();
+
         }
 
         public async Task<IEnumerable<AppUser>> GetUsersAsync()
