@@ -1,22 +1,22 @@
-import { THIS_EXPR } from '@angular/compiler/src/output/output_ast';
+import { map } from 'rxjs/operators';
 import { Component, OnInit } from '@angular/core';
 import { Observable } from 'rxjs';
 
 import { Member } from 'src/app/_models/member';
 import { MembersService } from 'src/app/_services/members.service';
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-member-list',
   templateUrl: './member-list.component.html',
-  styleUrls: ['./member-list.component.css']
+  styleUrls: ['./member-list.component.css'],
 })
 export class MemberListComponent implements OnInit {
   members: Observable<Member[]>;
 
-  constructor(private memberService: MembersService) { }
+  constructor(private memberService: MembersService, private route: ActivatedRoute) {}
 
   ngOnInit(): void {
     this.members = this.memberService.getMembers();
   }
-
 }

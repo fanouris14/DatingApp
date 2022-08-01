@@ -1,5 +1,13 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { NgForm } from '@angular/forms';
+import {
+  AbstractControl,
+  FormBuilder,
+  FormControl,
+  FormGroup,
+  ValidatorFn,
+  Validators,
+} from '@angular/forms';
+import { Router } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
 import { AccountService } from '../_services/account.service';
 
@@ -10,30 +18,62 @@ import { AccountService } from '../_services/account.service';
 })
 export class RegisterComponent implements OnInit {
   @Output() cancelFromRegisterComponent = new EventEmitter();
-  model: any = {};
+  registerForm: FormGroup;
+  maxDate: Date;
+  validationErrors: string[] = [];
 
   constructor(
     private accountService: AccountService,
-    private toastr: ToastrService
+    private toastr: ToastrService,
+    private fb: FormBuilder,
+    private router: Router
   ) {}
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    this.initializeForm();
+    this.maxDate = new Date();
+    this.maxDate.setFullYear(this.maxDate.getFullYear() - 18);
+  }
 
-  register(form: NgForm) {
-    this.model = {
-      username: form.value.username,
-      password: form.value.password,
+  initializeForm() {
+    this.registerForm = this.fb.group({
+      gender: ['male'],
+      username: ['', Validators.required],
+      knownAs: ['', Validators.required],
+      dateOfBirth: ['', Validators.required],
+      city: ['', Validators.required],
+      country: ['', Validators.required],
+      password: [
+        '',
+        [Validators.required, Validators.minLength(4), Validators.maxLength(8)],
+      ],
+      confirmPassword: [
+        '',
+        [Validators.required, this.matchValues('password')],
+      ],
+    });
+
+    this.registerForm.controls.password.valueChanges.subscribe(() => {
+      this.registerForm.controls.confirmPassword.updateValueAndValidity();
+    });
+  }
+
+  matchValues(matchTo: string): ValidatorFn {
+    return (control: AbstractControl) => {
+      return control?.value === control?.parent?.controls[matchTo].value
+        ? null
+        : { isMatching: true };
     };
-    console.log(this.model);
+  }
 
-    this.accountService.register(this.model).subscribe(
-      (res) => {
-        console.log(res);
-        this.cancel();
+  register() {
+    this.accountService.register(this.registerForm.value).subscribe(
+      () => {
+        this.router.navigate(['/members']);
       },
       (err) => {
-        console.log(err);
-        this.toastr.error(err.error);
+        console.log(err),
+        this.validationErrors = err
       }
     );
   }
