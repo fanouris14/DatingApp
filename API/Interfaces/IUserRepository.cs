@@ -1,4 +1,5 @@
 ﻿using API.Entities;
+using API.Helpers;
 
 namespace API.Interfaces
 {
@@ -8,7 +9,7 @@ namespace API.Interfaces
 
         Task<bool> SaveAllAsync();
 
-        Task<IEnumerable<AppUser>> GetUsersAsync();
+        Task<PagedList<AppUser>> GetUsersAsync(UserParams userParams);
 
         Task<AppUser> GetUserByIdAsync(int id);
 

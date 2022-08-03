@@ -40,6 +40,8 @@ namespace API
             //}
             app.UseMiddleware<ExceptionMiddleware>();
 
+
+
             app.UseHttpsRedirection();
 
             app.UseRouting();
@@ -48,7 +50,6 @@ namespace API
 
             app.UseAuthentication();
             app.UseAuthorization();
-
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();

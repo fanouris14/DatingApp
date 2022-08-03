@@ -1,6 +1,6 @@
 {
     "html.format.wrapAttributes": "force-aligned",
-    "prettier.printWidth": 200,
+    "prettier.printWidth": 400,
     "prettier.useEditorConfig": true,
     "prettier.proseWrap": "preserve"
 }
