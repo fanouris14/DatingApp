@@ -20,11 +20,9 @@ namespace API.Entities
         public string Country { get; set; }
         public ICollection<Photo> Photos { get; set; }
 
-
-        //public int GetAge()
-        //{
-        //    return DateOfBirth.CalculateAge();
-        //}
+        //user like relation
+        public ICollection<UserLike> LikedByUsers { get; set; } //likes on my profile
+        public ICollection<UserLike> LikedUsers { get; set; } //profiles that i like
 
     }
 }

@@ -21,9 +21,9 @@ export class MembersService {
   //   }),
   // };
 
+  // paginatedResult: PaginatedResult<Member[]> = new PaginatedResult<Member[]>();
   baseUrl = environment.apiUrl;
   members: Member[] = [];
-  // paginatedResult: PaginatedResult<Member[]> = new PaginatedResult<Member[]>();
   memberCache = new Map();
   user: User;
   userParams: UserParams;
@@ -148,6 +148,29 @@ export class MembersService {
 
   deletePhoto(photoId: number) {
     return this.http.delete(this.baseUrl + 'users/delete-photo/' + photoId);
+  }
+
+
+  addLike(username: string) {
+    return this.http.post(this.baseUrl + 'likes/' + username, {})
+  }
+
+  getLikes(predicate: string, pageNumber, pageSize) {
+    const paginatedResult: PaginatedResult<Partial<Member[]>> = new PaginatedResult<Partial<Member[]>>();
+
+    let params = this.getPaginationHeaders(pageNumber,pageSize);
+
+    params = params.append('predicate', predicate);
+
+    return this.http.get<Partial<Member[]>>(this.baseUrl + 'likes', { observe: 'response', params }).pipe(
+      map((response) => {
+        paginatedResult.result = response.body;
+        if (response.headers.get('Pagination') !== null) {
+          paginatedResult.pagination = JSON.parse(response.headers.get('Pagination'));
+        }
+        return paginatedResult;
+      }))
+    
   }
 
   //! END
