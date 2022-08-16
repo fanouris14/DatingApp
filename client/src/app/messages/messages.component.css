@@ -1,0 +1,9 @@
+.img-circle {
+    max-height: 50px;
+}
+
+.btn-danger:not(:disabled):not(.disabled) {
+    color: #fff;
+    background-color: #f02315;
+    border-color: #f02315;
+}
